@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+  backend:
+    build: .
+    container_name: rag_backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-qwen2.5:3b}
+      - CHUNK_SIZE=${CHUNK_SIZE:-800}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-150}
+      - TOP_K=${TOP_K:-5}
+      - FETCH_K=${FETCH_K:-20}
+      - LAMBDA_MULT=${LAMBDA_MULT:-0.5}
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  frontend:
+    build: .
+    container_name: rag_frontend
+    command: streamlit run frontend/streamlit_app.py --server.address 0.0.0.0 --server.port 8501
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
