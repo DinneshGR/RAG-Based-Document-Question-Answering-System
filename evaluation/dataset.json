@@ -1,0 +1,26 @@
+{
+  "description": "Sample evaluation set. Replace with questions/answers matching documents you actually index, then run evaluate.py.",
+  "cases": [
+    {
+      "question": "What is the total revenue mentioned in the report?",
+      "expected_answer": "Replace with the real expected answer from your test document.",
+      "relevant_document": "sample.pdf",
+      "relevant_page": 1,
+      "expected_keywords": ["revenue", "total"]
+    },
+    {
+      "question": "Who is the author of this document?",
+      "expected_answer": "Replace with the real expected answer from your test document.",
+      "relevant_document": "sample.pdf",
+      "relevant_page": 1,
+      "expected_keywords": ["author"]
+    },
+    {
+      "question": "What is the main conclusion of the document?",
+      "expected_answer": "Replace with the real expected answer from your test document.",
+      "relevant_document": "sample.pdf",
+      "relevant_page": 2,
+      "expected_keywords": ["conclusion"]
+    }
+  ]
+}
